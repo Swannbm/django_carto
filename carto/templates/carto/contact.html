@@ -1,0 +1,38 @@
+{% extends "carto/base.html" %}
+
+
+{% block content %}
+<div style="height: 15px;"></div>
+<div class="container">
+        <div class="row">
+            <div class="col-sm">
+
+            </div>
+            <div class="col-sm">
+                {% if form %}
+                <p>N'hésitez pas à nous envoyer un mot d'encouragement :</p>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <p>
+                            {{ field.errors }}
+                            {{ field }}
+                        </p>
+                    {% endfor %}
+                    <input type="submit" value="Envoyer">
+                </form>
+                {% else %}
+                    <div class="alert alert-success" role="alert">
+                        Votre message a été transmis. Merci beaucoup pour votre intérêt.
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-sm poi-actions">
+                
+            </div>
+        </div>
+      </div>
+
+
+
+{% endblock %}

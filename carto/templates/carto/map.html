@@ -1,0 +1,56 @@
+{% extends "carto/base.html" %}
+
+{% block headleaf %}
+<!-- LEAFLET -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+crossorigin=""/>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+crossorigin=""></script>
+{% endblock %}
+
+{% block content %}
+<!-- CARTO -->
+<div id="mapid"></div>
+<script>
+var mymap = L.map('mapid').setView([{{ center.0 }}, {{ center.1 }}], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mymap);
+
+{% if poi_list %}
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.popupContent) {
+        layer.bindPopup(feature.properties.popupContent);
+    }
+}
+
+var geojsonFeature = {
+    "type": "FeatureCollection",
+    "features": [
+        {% for poi in poi_list %}
+        { 
+            "type": "Feature",
+            "properties": {
+                "name": "{{ poi.title }}",
+                "popupContent": "<b><a href='{% url 'carto:detail' poi.id %}'>{{ poi.title }}</a></b><br/>{{ poi.addresse_localised }}"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [{{ poi.longitude }}, {{ poi.latitude }}]
+            }
+        },
+        {% endfor %}
+    ],
+    "attribution": "NOTICE: © 2019 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
+};
+L.geoJSON(geojsonFeature, {
+    onEachFeature: onEachFeature
+}).addTo(mymap);
+{% endif %}
+</script>
+{% endblock %}
