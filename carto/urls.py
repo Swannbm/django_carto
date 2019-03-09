@@ -11,8 +11,4 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     # http://www.auberentransition.fr/carto/search
     path('search/', views.search, name='search'),
-
-    # other
-    path('test', views.test, name='test'),
-    path('hello', views.hello, name='hello'),
 ]
