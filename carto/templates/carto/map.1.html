@@ -1,0 +1,68 @@
+<html>
+<head>
+<meta charset="utf-8">
+<!-- LEAFLET -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+crossorigin=""/>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+crossorigin=""></script>
+</head>
+<body>
+<!-- DIV QUI VA CONTENIR LA CARTE -->
+<div id="mapid" style="width: 500px; height: 500px;"></div>
+<script>
+// Le setView permet de centrer la carte (ici 48.9, 2.4) et de définir le zoom (13)
+var mymap = L.map('mapid').setView([48.9, 2.4], 13);
+// ici on va chercher le fond de carte et on indique qui le fournit
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mymap);
+// on liste les points que l'on souhaite ajouter
+var geojsonFeature = {
+    "type": "FeatureCollection",
+    "features": [
+        { 
+            "type": "Feature",
+            "properties": {
+                "name": "La Villette",
+                "popupContent": "cité des sciences et de la villette"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [2.39, 48.9]
+            }
+        },
+        { 
+            "type": "Feature",
+            "properties": {
+                "name": "Pôle emploi",
+                "popupContent": "Pensez à vous actualiser"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [2.391, 48.91]
+            }
+        },
+        
+    ],
+    "attribution": "NOTICE: © 2019 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
+};
+
+// fonction qui prévient la carte qu'il y a un popup
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.popupContent) {
+        layer.bindPopup(feature.properties.popupContent);
+    }
+}
+
+// on ajoute les points sur la carte en déclenchant le triger
+L.geoJSON(geojsonFeature, {
+    onEachFeature: onEachFeature
+}).addTo(mymap);
+</script>
+</body>
+</html>

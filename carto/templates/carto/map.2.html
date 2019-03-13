@@ -1,0 +1,62 @@
+{% extends "carto/base.html" %}
+{% load static %}
+
+{% block headleaf %}
+<!-- LEAFLET -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+crossorigin=""/>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+crossorigin=""></script>
+<script src="{% static 'carto/js/icons.js' %}"></script>
+<script src="{% static 'carto/js/utility.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!-- CARTO -->
+<div id="mapid2" class="container-fluid map"></div>
+<script>
+var mymap = L.map('mapid2').setView([{{ center.0 }}, {{ center.1 }}], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mymap);
+
+{% if poi_list %}
+
+var geojsonFeature = {
+    "type": "FeatureCollection",
+    "features": [
+        {% for poi in poi_list %}
+        { 
+            "type": "Feature",
+            "properties": {
+                "name": "{{ poi.title }}",
+                "popupContent": "<b><a href='{% url 'carto:detail' poi.id %}'>{{ poi.title }}</a></b><br/>{{ poi.addresse_localised }}",
+                {% if poi.category %}
+                "icon_color": {{ poi.category.color_id }}
+                {% else %}
+                "icon_color": 3
+                {% endif %}
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [{{ poi.longitude }}, {{ poi.latitude }}]
+            }
+        },
+        {% endfor %}
+    ],
+    "attribution": "NOTICE: © 2019 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained. POI(s) provided by Foursquare."
+};
+
+// See utility.js to find below functions
+L.geoJSON(geojsonFeature, {
+    onEachFeature: onEachFeature,
+    pointToLayer: getMarker 
+}).addTo(mymap);
+
+{% endif %}
+</script>
+{% endblock %}

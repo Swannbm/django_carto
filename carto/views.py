@@ -8,12 +8,16 @@ from .models import PointOfInterest as POI
 from .forms import ContactForm
 
 
+def cours(request):
+    return render(request, 'carto/map.1.html')
+
+
 def index(request):
     context = {
         'poi_list': POI.objects.filter(is_localised=True),
         'center': (48.915246, 2.394479)
     }
-    return render(request, 'carto/map.html', context)
+    return render(request, 'carto/map.2.html', context)
 
 
 @require_http_methods(["POST"])
@@ -55,8 +59,10 @@ def contact(request):
 
 
 def test(request):
-    return render(request, 'carto/map_test.html')
+    context = {
+        'poi_list': POI.objects.filter(is_localised=True)[:10],
+        'center': (48.915246, 2.394479)
+    }
+    return render(request, 'carto/map.2.html', context)
 
 
-def hello(request):
-    return render(request, 'carto/hello.html')

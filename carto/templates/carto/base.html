@@ -3,7 +3,13 @@
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="">
+<meta name="author" content="">
 
 <!-- BOOTSTRAP -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -12,37 +18,34 @@
 {% endblock %}
 
 <!-- APP SPECIFIC -->
-<link rel="stylesheet" href="{% static 'carto/carto.css' %}" />
+<link rel="stylesheet" href="{% static 'carto/css/carto.css' %}" />
 </head>
 <body>
 
 <!-- NAVBAR -->
-
-
-<nav class="navbar navbar-expand navbar-dark bg-success" id="navbar">
-    <a class="navbar-brand navbar-title" href="#">AuberEnTransition</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+<nav class="navbar navbar-expand-md navbar-dark bg-success navbar-fixed-top" role="navigation">
+    <a class="navbar-brand" href="#">AuberEnTransition</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    
-    <div class="collapse navbar-collapse" id="navbarsExample02">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'carto:index' %}">Carto <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'carto:contact' %}">Contact</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-            </li>
-        </ul>
-        <form action="{% url 'carto:search' %}" class="form-inline my-2 my-md-0" method="POST">
-            {% csrf_token %}
-            <input name='slug' class="form-control border border-warning" type="text" placeholder="Search">
-        </form>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'carto:index' %}">Carto<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'carto:contact' %}">Contact</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+        </li>
+      </ul>
+      <form action="{% url 'carto:search' %}" class="form-inline my-2 my-md-0" method="POST">
+        {% csrf_token %}
+        <input name='slug' class="form-control border border-warning" type="text" placeholder="Search">
+    </form>
     </div>
-</nav>
+  </nav>
 
 {% block content %}
 {% endblock %}
